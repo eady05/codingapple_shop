@@ -1,47 +1,60 @@
 import './App.css';
+import './Error.css';
 import { Button, Navbar, Container, Nav, Row, Col } from 'react-bootstrap';
-import bgimag from './img/bg.jpeg';
-import data from './data.js';
 import React, { useEffect, useState } from "react";
+import {Routes,Route,Link, useNavigate, Outlet} from 'react-router-dom';
+import Home from './Home.js';
+import Detail from './Detail.js';
+import Error from './Error.js';
 
 function App() {
 
-  let [shoes] = useState(data);
+  let navigate = useNavigate();
 
   return (
     <div className="App">
       <Navbar bg="dark" variant="dark">
         <Container>
-          <Navbar.Brand href="#home">CoCo Market</Navbar.Brand>
+          <Navbar.Brand href="#home" onClick={()=>navigate('/')}>CoCo Market</Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#features">Cart</Nav.Link>
+            <Nav.Link href="#home" onClick={()=>navigate('/')}>Home</Nav.Link>
+            <Nav.Link href="#features" onClick={()=>navigate('/detail')}>Detail</Nav.Link>
+            {//<Link to="/" ><Nav.Link href="#home" >Home</Nav.Link></Link>
+            //<Link to="/detail"><Nav.Link href="#features">Detail</Nav.Link></Link>
+            }
           </Nav>
         </Container>
       </Navbar>
-      <div className='main-bg' style={{backgroundImage : 'url(https://mobiinsidecontent.s3.ap-northeast-2.amazonaws.com/kr/wp-content/uploads/2021/07/02094730/나이키1.png)'}}>
-      </div>
-      <div className='container'>
-        <Row>
-          <Col sm>
-            <img src='https://codingapple1.github.io/shop/shoes1.jpg' width="80%"/>
-            <h4>{shoes[0].title}</h4>
-            <p>{shoes[0].content}</p>
-          </Col>
-          <Col sm>
-            <img src='https://codingapple1.github.io/shop/shoes2.jpg' width="80%"/>
-            <h4>{shoes[1].title}</h4>
-            <p>{shoes[1].content}</p>
-          </Col>
-          <Col sm>
-            <img src='https://codingapple1.github.io/shop/shoes3.jpg' width="80%"/>
-            <h4>{shoes[2].title}</h4>
-            <p>{shoes[2].content}</p>
-          </Col>
-        </Row>
-    </div>
+      <Routes>
+        <Route path='/' element={<Home/>}/>
+        <Route path='/detail' element={<Detail/>}/>
+        <Route path='/about' element={<About/>}>
+          <Route path='member' element={<div>멤버임</div>}/>
+          <Route path='location' element={<div>위치정보임</div>}/>
+        </Route>
+        <Route path='/event' element={<EventPage/>}>
+          <Route path='one' element={<div>첫 주문시 양배추즙 서비스</div>}/>
+          <Route path='two' element={<div>생일기념 쿠폰받기</div>}/>
+        </Route>
+        <Route path='*' element={<Error/>}/>
+      </Routes>
     </div>
   );
 }
-
+function About(){
+  return (
+    <div>
+      <h4>about페이지임</h4>
+      <Outlet></Outlet>
+    </div>
+  )
+}
+function EventPage(){
+  return (
+    <div>
+      <h4>오늘의 이벤트</h4>
+      <Outlet></Outlet>
+    </div>
+  )
+}
 export default App;
